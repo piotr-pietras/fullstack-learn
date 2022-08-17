@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_NO_SCRIPT",
+    "err": {
+      "name": "pnpm",
+      "message": "Missing script: install",
+      "code": "ERR_PNPM_NO_SCRIPT",
+      "stack": "pnpm: Missing script: install\n    at Object.handler (/usr/pnpm-global/5/node_modules/.pnpm/pnpm@6.31.0/node_modules/pnpm/dist/pnpm.cjs:177856:15)\n    at async /usr/pnpm-global/5/node_modules/.pnpm/pnpm@6.31.0/node_modules/pnpm/dist/pnpm.cjs:182106:21\n    at async run (/usr/pnpm-global/5/node_modules/.pnpm/pnpm@6.31.0/node_modules/pnpm/dist/pnpm.cjs:182080:34)\n    at async runPnpm (/usr/pnpm-global/5/node_modules/.pnpm/pnpm@6.31.0/node_modules/pnpm/dist/pnpm.cjs:182299:5)\n    at async /usr/pnpm-global/5/node_modules/.pnpm/pnpm@6.31.0/node_modules/pnpm/dist/pnpm.cjs:182291:7"
+    }
+  }
+}
