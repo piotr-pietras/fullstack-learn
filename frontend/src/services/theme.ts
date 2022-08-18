@@ -54,14 +54,13 @@ declare module "@mui/material/styles" {
 
 export const theme = createTheme({
   typography: {
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: "sans-serif",
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         ".App": {
           height: "100%",
-          padding: "0.5rem",
         },
         "#root": {
           height: "100%",
