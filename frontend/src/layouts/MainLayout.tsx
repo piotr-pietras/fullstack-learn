@@ -41,4 +41,6 @@ const NavigatorContainer = styled("div")``;
 
 const ChildrenContainer = styled("div")`
   width: 100%;
+  display: flex;
+  justify-content: center;
 `;

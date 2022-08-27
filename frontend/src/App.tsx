@@ -1,9 +1,12 @@
+import { PostBoard } from "./features/PostBoard/PostBoard";
 import { MainLayout } from "./layouts/MainLayout";
 
 function App() {
   return (
     <div className="App">
-      <MainLayout>aa</MainLayout>
+      <MainLayout>
+        <PostBoard />
+      </MainLayout>
     </div>
   );
 }

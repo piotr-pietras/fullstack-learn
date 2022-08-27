@@ -1,5 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { State } from "../services/store";
+import { State } from "./services/store";
 
 export enum Category {
   all = "all",

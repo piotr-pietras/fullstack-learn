@@ -24,6 +24,10 @@ declare module "@mui/material/styles" {
       S: string;
       XS: string;
     };
+    fontWeight: {
+      thin: number;
+      bold: number;
+    };
   }
 
   interface ThemeOptions {
@@ -48,6 +52,10 @@ declare module "@mui/material/styles" {
       M: string;
       S: string;
       XS: string;
+    };
+    fontWeight?: {
+      thin: number;
+      bold: number;
     };
   }
 }
@@ -95,5 +103,9 @@ export const theme = createTheme({
     M: "0.875rem",
     S: "0.75rem",
     XS: "0.625rem",
+  },
+  fontWeight: {
+    thin: 100,
+    bold: 900,
   },
 });

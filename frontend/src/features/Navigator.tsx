@@ -9,7 +9,7 @@ import {
   Category,
   selectAllCategories,
   selectChosenCategory,
-} from "../stores/app.store";
+} from "../app.store";
 
 const getIcon = (category: keyof typeof Category) => {
   switch (category) {
@@ -36,6 +36,7 @@ export const Navigator = () => {
     <Container>
       {categories.map((category) => (
         <Button
+          key={category}
           onClick={() => dispatch(categorySelected(category))}
           variant={category === selected ? "contained" : "outlined"}
         >

@@ -10,6 +10,7 @@ specifiers:
   '@types/node': ^16.11.28
   '@types/react': ^18.0.6
   '@types/react-dom': ^18.0.2
+  date-fns: ^2.29.2
   react: ^18.0.0
   react-dom: ^18.0.0
   react-redux: ^8.0.1
@@ -26,6 +27,7 @@ dependencies:
   '@types/node': 16.11.49
   '@types/react': 18.0.17
   '@types/react-dom': 18.0.6
+  date-fns: 2.29.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-redux: 8.0.2_ff80cd9dfb626a6c6c4251864122e347
@@ -4189,6 +4191,11 @@ packages:
       abab: 2.0.6
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.7.0
+    dev: false
+
+  /date-fns/2.29.2:
+    resolution: {integrity: sha512-0VNbwmWJDS/G3ySwFSJA3ayhbURMTJLtwM2DTxf9CWondCnh6DTNlO9JgRSq6ibf4eD0lfMJNBxUdEAHHix+bA==}
+    engines: {node: '>=0.11'}
     dev: false
 
   /debug/2.6.9:
