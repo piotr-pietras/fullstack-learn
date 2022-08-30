@@ -1,9 +1,17 @@
-import { useAppSelector } from "../../services/store";
+import { useAppDispatch, useAppSelector } from "../../services/store";
 import { selectPosts } from "./selectors";
 import { PostCard } from "./PostCard";
+import { useEffect } from "react";
+import { PostBoardActions } from "./post-board.store";
 
 export const PostBoard = () => {
+  const dispatch = useAppDispatch();
   const posts = useAppSelector(selectPosts);
+
+  useEffect(() => {
+    dispatch(PostBoardActions.dataFetched());
+  }, [dispatch]);
+
   return (
     <div>
       {posts.map((post) => (

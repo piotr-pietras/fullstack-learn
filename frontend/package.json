@@ -1,6 +1,5 @@
 {
-  "homepage": "https://piotr-pietras.github.io/ti-fight-roller",
-  "name": "ti-fight-roller",
+  "name": "fullstack-learn",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -18,6 +17,7 @@
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.1",
     "react-scripts": "5.0.1",
+    "redux-saga": "^1.2.1",
     "typescript": "^4.6.3"
   },
   "scripts": {

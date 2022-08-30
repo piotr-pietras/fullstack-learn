@@ -38,7 +38,8 @@ export const Navigator = () => {
         <Button
           key={category}
           onClick={() => dispatch(categorySelected(category))}
-          variant={category === selected ? "contained" : "outlined"}
+          variant={category === selected ? "contained" : "text"}
+          selected={category === selected}
         >
           {getIcon(category)}
           <Text>{category}</Text>
@@ -51,15 +52,18 @@ export const Navigator = () => {
 const Container = styled("div")`
   height: 100%;
   width: 100%;
+  min-width: 180px;
   display: flex;
   flex-direction: column;
 `;
 
-const Button = styled(ButtonMUI)`
+const Button = styled(ButtonMUI)<{ selected: boolean }>`
   margin: 0.5rem;
   display: flex;
   justify-content: space-between;
   font-size: 3rem;
+  opacity: ${({ selected }) => !selected && 0.7};
+  color: ${({ selected, theme }) => !selected && theme.colors.grey};
 `;
 
 const Text = styled("span")`

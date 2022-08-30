@@ -18,7 +18,11 @@ export const PostCard = ({ post }: Props) => {
           </HeaderDate>
         </HeaderText>
       </Header>
-      <Body></Body>
+      <Body>
+        {post.text.split("\n").map((line, i) => (
+          <div key={i}>{line}</div>
+        ))}
+      </Body>
     </CardContainer>
   );
 };
@@ -47,4 +51,6 @@ const HeaderDate = styled("div")`
   font-size: ${({ theme }) => theme.fontSize.S};
 `;
 
-const Body = styled("div")``;
+const Body = styled("div")`
+  margin: 0.5rem;
+`;

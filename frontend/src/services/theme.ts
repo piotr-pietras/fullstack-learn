@@ -3,19 +3,12 @@ import { createTheme } from "@mui/material/styles";
 declare module "@mui/material/styles" {
   interface Theme {
     colors: {
-      grey15: string;
-      grey25: string;
-      grey50: string;
-      grey75: string;
-      grey100: string;
-      grey200: string;
-      grey300: string;
-      grey400: string;
-      grey500: string;
-      grey600: string;
-      grey700: string;
-      grey800: string;
-      grey1000: string;
+      grey: string;
+    };
+    palette: {
+      primary: {
+        main: string;
+      };
     };
     fontSize: {
       XL: string;
@@ -32,19 +25,7 @@ declare module "@mui/material/styles" {
 
   interface ThemeOptions {
     colors?: {
-      grey15: string;
-      grey25: string;
-      grey50: string;
-      grey75: string;
-      grey100: string;
-      grey200: string;
-      grey300: string;
-      grey400: string;
-      grey500: string;
-      grey600: string;
-      grey700: string;
-      grey800: string;
-      grey1000: string;
+      grey: string;
     };
     fontSize?: {
       XL: string;
@@ -59,6 +40,10 @@ declare module "@mui/material/styles" {
     };
   }
 }
+
+const colors = {
+  grey: "#BDBDBD",
+};
 
 export const theme = createTheme({
   typography: {
@@ -82,21 +67,7 @@ export const theme = createTheme({
       },
     },
   },
-  colors: {
-    grey15: "#f9f9f9",
-    grey25: "#f3f3f3",
-    grey50: "#eaeef3",
-    grey75: "#dfe2e7",
-    grey100: "#d2d3d4",
-    grey200: "#adbbc5",
-    grey300: "#eaebed",
-    grey400: "#768b9b",
-    grey500: "#f4f5f7",
-    grey600: "#f3f3f3",
-    grey700: "#425563",
-    grey800: "#34434e",
-    grey1000: "#000000",
-  },
+  colors,
   fontSize: {
     XL: "1.25rem",
     L: "1rem",
