@@ -10,13 +10,11 @@ export const PostBoard = () => {
 
   useEffect(() => {
     dispatch(PostBoardActions.dataFetched());
-  }, [dispatch]);
+  }, []);
 
   return (
     <div>
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
+      {posts && posts.map((post) => <PostCard key={post.id} post={post} />)}
     </div>
   );
 };

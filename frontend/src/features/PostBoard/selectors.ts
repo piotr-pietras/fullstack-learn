@@ -1,5 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { Post } from "../../types/post.type";
-import posts from "../../mocks/posts.mock.json";
+import { selectPostBoard } from "./post-board.store";
 
-export const selectPosts = createSelector(() => posts as Post[]);
+export const selectPosts = createSelector(
+  selectPostBoard,
+  ({ request }) => request.response as Post[] | undefined
+);

@@ -9,7 +9,7 @@ export const listener = (host: string, port: number) => {
     switch (request) {
       case Requests.test: {
         res.writeHead(200, "OK", request.headers);
-        res.end(JSON.stringify({ test: "test" }));
+        res.end(request.resBody());
         break;
       }
       default: {

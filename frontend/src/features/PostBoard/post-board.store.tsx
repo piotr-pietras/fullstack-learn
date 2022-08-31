@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { call, fork, put, takeLatest } from "redux-saga/effects";
 import { env } from "../../services/env";
+import { State } from "../../services/store";
 
 const name = "postBoard";
 
@@ -30,20 +31,22 @@ export const PostBoardSlice = createSlice({
 });
 
 export const PostBoardActions = PostBoardSlice.actions;
+export const selectPostBoard = (state: State) => state.postBoard;
 
 function* DataFecthedSaga() {
   yield takeLatest(PostBoardActions.dataFetched, function* () {
     yield put(PostBoardActions.requestUpdated({ status: "pending" }));
-    // try {
-    const response: Response = yield call(fetch, `${env.backendURL}test`);
-    const json: unknown = yield response.json();
-    yield put(
-      PostBoardActions.requestUpdated({ status: "success", response: json })
-    );
-    // }
-    // catch (err) {
-    //   yield put(PostBoardActions.requestUpdated({ status: "failure" }));
-    // }
+    try {
+      const response: Response = yield call(fetch, `${env.backendURL}posts`, {
+        method: "POST",
+      });
+      const json: unknown = yield response.json();
+      yield put(
+        PostBoardActions.requestUpdated({ status: "success", response: json })
+      );
+    } catch (err) {
+      yield put(PostBoardActions.requestUpdated({ status: "failure" }));
+    }
   });
 }
 
