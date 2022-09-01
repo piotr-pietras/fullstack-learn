@@ -1,55 +1,37 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { call, fork, put, takeLatest } from "redux-saga/effects";
+import { createSlice } from "@reduxjs/toolkit";
+import { fork } from "redux-saga/effects";
 import { env } from "../../services/env";
+import { httpSagaAdapter, RequestState } from "../../services/httpReduxAdapter";
 import { State } from "../../services/store";
 
-const name = "postBoard";
+const { requestInitialState, getRequestReducers, getRequestSaga } =
+  httpSagaAdapter();
 
-interface RequestState {
-  response?: unknown;
-  status?: "pending" | "success" | "failure";
-}
-
-interface InitialState {
-  request: RequestState;
-}
+interface InitialState extends RequestState {}
 
 const initialState: InitialState = {
-  request: {},
+  ...requestInitialState,
 };
 
 export const PostBoardSlice = createSlice({
-  name,
+  name: "postBoard",
   initialState,
   reducers: {
-    dataFetched: (state) => {},
-    requestUpdated: (state, { payload }: PayloadAction<RequestState>) => {
-      if (payload.response) state.request.response = payload.response;
-      if (payload.status) state.request.status = payload.status;
-    },
+    ...getRequestReducers(),
   },
 });
 
 export const PostBoardActions = PostBoardSlice.actions;
 export const selectPostBoard = (state: State) => state.postBoard;
 
-function* DataFecthedSaga() {
-  yield takeLatest(PostBoardActions.dataFetched, function* () {
-    yield put(PostBoardActions.requestUpdated({ status: "pending" }));
-    try {
-      const response: Response = yield call(fetch, `${env.backendURL}posts`, {
-        method: "POST",
-      });
-      const json: unknown = yield response.json();
-      yield put(
-        PostBoardActions.requestUpdated({ status: "success", response: json })
-      );
-    } catch (err) {
-      yield put(PostBoardActions.requestUpdated({ status: "failure" }));
-    }
-  });
-}
+const RequestSaga = getRequestSaga(
+  {
+    method: "POST",
+    url: `${env.backendURL}posts`,
+  },
+  PostBoardActions
+);
 
 export function* PostBoardSaga() {
-  yield fork(DataFecthedSaga);
+  yield fork(RequestSaga);
 }
