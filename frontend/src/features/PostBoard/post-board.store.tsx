@@ -1,16 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fork } from "redux-saga/effects";
 import { env } from "../../services/env";
-import { httpSagaAdapter, RequestState } from "../../services/httpReduxAdapter";
+import { httpReduxAdapter } from "../../services/httpReduxAdapter";
 import { State } from "../../services/store";
+import { Post } from "../../types/post.type";
 
-const { requestInitialState, getRequestReducers, getRequestSaga } =
-  httpSagaAdapter();
+const { getRequestInitialState, getRequestReducers, getRequestSaga } =
+  httpReduxAdapter<Post[]>();
 
-interface InitialState extends RequestState {}
+interface InitialState extends ReturnType<typeof getRequestInitialState> {}
 
 const initialState: InitialState = {
-  ...requestInitialState,
+  ...getRequestInitialState(),
 };
 
 export const PostBoardSlice = createSlice({
