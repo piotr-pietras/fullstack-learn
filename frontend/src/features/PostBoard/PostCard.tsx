@@ -1,6 +1,6 @@
 import { Avatar, Card, styled } from "@mui/material";
 import { dateFormat } from "../../services/date";
-import { Post } from "../../types/post.type";
+import { Post } from "../../../../types/post.type";
 
 interface Props {
   post: Post;
@@ -14,12 +14,12 @@ export const PostCard = ({ post }: Props) => {
         <HeaderText>
           <HeaderTitle>{post.title}</HeaderTitle>
           <HeaderDate>
-            {dateFormat(post.creationTime, "DAT_LETTER_MONTH_TIME")}
+            {dateFormat(post.created_on, "DAT_LETTER_MONTH_TIME")}
           </HeaderDate>
         </HeaderText>
       </Header>
       <Body>
-        {post.text.split("\n").map((line, i) => (
+        {post.content.split("\n").map((line, i) => (
           <div key={i}>{line}</div>
         ))}
       </Body>

@@ -2,9 +2,9 @@ import { User } from "./user.type";
 
 export interface Post {
   id: string;
-  creationTime: number;
+  created_on: number;
   title: string;
-  text: string;
+  content: string;
   //   author: User;
   //   comments: Comment[];
 }

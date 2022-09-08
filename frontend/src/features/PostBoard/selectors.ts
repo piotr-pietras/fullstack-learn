@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { Post } from "../../types/post.type";
+import { Post } from "../../../../types/post.type";
 import { selectPostBoard } from "./post-board.store";
 
 export const selectPosts = createSelector(

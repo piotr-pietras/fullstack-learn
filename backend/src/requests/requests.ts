@@ -1,22 +1,16 @@
 import { RequestOptions } from "http";
-import posts from "../../mocks/posts.mock.json";
+import { getPostsRequest } from "./posts/posts.builder";
 
 enum RequestsList {
-  test = "test",
+  posts = "posts",
 }
 
 type RequestsType = {
-  [key in RequestsList]: RequestOptions & { resBody: () => string };
+  [key in RequestsList]: RequestOptions & {
+    buildResBody: () => Promise<string>;
+  };
 };
 
 export const Requests: RequestsType = {
-  [RequestsList.test]: {
-    path: "/posts",
-    method: "POST",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    },
-    resBody: () => JSON.stringify(posts),
-  },
+  [RequestsList.posts]: getPostsRequest(),
 };

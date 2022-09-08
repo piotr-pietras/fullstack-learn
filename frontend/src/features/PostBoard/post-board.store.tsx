@@ -3,7 +3,7 @@ import { fork } from "redux-saga/effects";
 import { env } from "../../services/env";
 import { httpReduxAdapter } from "../../services/httpReduxAdapter";
 import { State } from "../../services/store";
-import { Post } from "../../types/post.type";
+import { Post } from "../../../../types/post.type";
 
 const { getRequestInitialState, getRequestReducers, getRequestSaga } =
   httpReduxAdapter<Post[]>();
