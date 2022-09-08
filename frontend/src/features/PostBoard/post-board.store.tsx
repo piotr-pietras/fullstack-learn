@@ -28,7 +28,7 @@ export const selectPostBoard = (state: State) => state.postBoard;
 const RequestSaga = getRequestSaga(
   {
     method: "POST",
-    url: `${env.backendURL}posts`,
+    url: `${env.backendURL}posts?quantity=20`,
   },
   PostBoardActions
 );
