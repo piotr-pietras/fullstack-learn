@@ -4,6 +4,7 @@ declare module "@mui/material/styles" {
   interface Theme {
     colors: {
       grey: string;
+      blue: string;
     };
     palette: {
       primary: {
@@ -26,6 +27,7 @@ declare module "@mui/material/styles" {
   interface ThemeOptions {
     colors?: {
       grey: string;
+      blue: string;
     };
     fontSize?: {
       XL: string;
@@ -43,6 +45,7 @@ declare module "@mui/material/styles" {
 
 const colors = {
   grey: "#BDBDBD",
+  blue: "#1976d2",
 };
 
 export const theme = createTheme({

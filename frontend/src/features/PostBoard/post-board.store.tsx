@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fork } from "redux-saga/effects";
-import { env } from "../../services/env";
 import { httpReduxAdapter } from "../../services/httpReduxAdapter";
 import { State } from "../../services/store";
 import { Post } from "../../../../types/post.type";
+import { AppActions } from "../../app.store";
 
 const { getRequestInitialState, getRequestReducers, getRequestSaga } =
   httpReduxAdapter<Post[]>();
@@ -25,13 +25,7 @@ export const PostBoardSlice = createSlice({
 export const PostBoardActions = PostBoardSlice.actions;
 export const selectPostBoard = (state: State) => state.postBoard;
 
-const RequestSaga = getRequestSaga(
-  {
-    method: "POST",
-    url: `${env.backendURL}posts?quantity=20`,
-  },
-  PostBoardActions
-);
+const RequestSaga = getRequestSaga(PostBoardActions, AppActions.appLoaded);
 
 export function* PostBoardSaga() {
   yield fork(RequestSaga);

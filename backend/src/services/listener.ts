@@ -1,6 +1,7 @@
 import { createServer, ServerResponse } from "http";
 import { ParsedUrlQuery } from "querystring";
 import url from "url";
+import { pause } from "../helpers/pause";
 import { recognizeRequest } from "../requests/recognizeRequest";
 import { Requests } from "../requests/requests";
 
@@ -18,6 +19,9 @@ const responseTree = async (
   query: ParsedUrlQuery,
   res: ServerResponse
 ) => {
+  //Imitates not localhost
+  await pause(500);
+
   switch (req) {
     case Requests.posts: {
       res.writeHead(200, "OK", req.headers);

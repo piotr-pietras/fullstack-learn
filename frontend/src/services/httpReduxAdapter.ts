@@ -1,10 +1,15 @@
-import { CaseReducerActions, PayloadAction } from "@reduxjs/toolkit";
+import {
+  ActionCreatorWithPayload,
+  CaseReducerActions,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { call, ForkEffect, put, takeLatest } from "redux-saga/effects";
 
+type RequestStatus = "pending" | "success" | "failure";
 export interface RequestState<T> {
   request: {
     response?: T;
-    status?: "pending" | "success" | "failure";
+    status?: RequestStatus;
   };
 }
 
@@ -13,7 +18,10 @@ export type RequestOption = {
   method: "GET" | "POST";
 };
 
-type DataFetchedReducer = () => void;
+type DataFetchedReducer = (
+  _: any,
+  { payload }: PayloadAction<RequestOption>
+) => void;
 type RequestUpdatedReducer = (
   state: any,
   { payload }: PayloadAction<RequestState<unknown>["request"]>
@@ -26,16 +34,16 @@ interface SagaAdapter<T> {
     requestUpdated: RequestUpdatedReducer;
   };
   getRequestSaga: (
-    options: RequestOption,
     actions: CaseReducerActions<{
       dataFetched: DataFetchedReducer;
       requestUpdated: RequestUpdatedReducer;
-    }>
+    }>,
+    globalLoading?: ActionCreatorWithPayload<boolean, string>
   ) => () => Generator<ForkEffect<never>, void, unknown>;
 }
 
 const buildReducers = () => ({
-  dataFetched: () => {},
+  dataFetched: (_: any, { payload }: PayloadAction<RequestOption>) => {},
   requestUpdated: (
     state: any,
     { payload }: PayloadAction<RequestState<unknown>["request"]>
@@ -46,26 +54,31 @@ const buildReducers = () => ({
 });
 
 const buildSagaFunction = (
-  { method, url }: RequestOption,
   {
     dataFetched,
     requestUpdated,
   }: CaseReducerActions<{
     dataFetched: DataFetchedReducer;
     requestUpdated: RequestUpdatedReducer;
-  }>
+  }>,
+  globalLoading?: ActionCreatorWithPayload<boolean, string>
 ) => {
   return function* () {
-    yield takeLatest(dataFetched, function* () {
+    yield takeLatest(dataFetched, function* ({ payload: { method, url } }) {
       yield put(requestUpdated({ status: "pending" }));
+      if (globalLoading) yield put(globalLoading(true));
+
       try {
         const response: Response = yield call(fetch, url, {
           method,
         });
         const json: unknown = yield response.json();
+        
         yield put(requestUpdated({ status: "success", response: json }));
+        if (globalLoading) yield put(globalLoading(false));
       } catch (err) {
         yield put(requestUpdated({ status: "failure" }));
+        if (globalLoading) yield put(globalLoading(false));
       }
     });
   };
