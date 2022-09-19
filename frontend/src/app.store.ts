@@ -1,5 +1,4 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fork } from "redux-saga/effects";
 import { State } from "./services/store";
 
 export enum Category {
@@ -12,11 +11,13 @@ export enum Category {
 interface InitialState {
   category: keyof typeof Category;
   appLoading: boolean;
+  isDrawerOpened: boolean;
 }
 
 const initialState: InitialState = {
   category: "all",
   appLoading: false,
+  isDrawerOpened: false,
 };
 
 export const AppSlice = createSlice({
@@ -28,6 +29,9 @@ export const AppSlice = createSlice({
       { payload }: PayloadAction<keyof typeof Category>
     ) => {
       state.category = payload;
+    },
+    drawerOpened: (state, { payload }: PayloadAction<boolean>) => {
+      state.isDrawerOpened = payload;
     },
     appLoaded: (state, { payload }: PayloadAction<boolean>) => {
       state.appLoading = payload;
@@ -42,6 +46,11 @@ export const selectAllCategories = () => Object.values(Category);
 export const selectChosenCategory = createSelector(
   selectAppSlice,
   (app) => app.category
+);
+
+export const selectAppIsDrawerOpened = createSelector(
+  selectAppSlice,
+  (app) => app.isDrawerOpened
 );
 
 export const selectAppLoading = createSelector(

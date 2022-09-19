@@ -52,7 +52,7 @@ export const Navigator = () => {
 const Container = styled("div")`
   height: 100%;
   width: 100%;
-  min-width: 180px;
+  min-width: 250px;
   display: flex;
   flex-direction: column;
 `;

@@ -64,9 +64,6 @@ export const theme = createTheme({
         body: {
           height: "100%",
         },
-        html: {
-          height: "100%",
-        },
       },
     },
   },

@@ -1,20 +1,24 @@
-import { LinearProgress, styled } from "@mui/material";
+import { Drawer, LinearProgress, styled } from "@mui/material";
 import React, { useRef } from "react";
-import { selectAppLoading } from "../app.store";
+import { AppActions, selectAppIsDrawerOpened, selectAppLoading } from "../app.store";
 import { AppBar } from "../features/AppBar";
-import { Navigator } from "../features/Navigator";
-import { useAppSelector } from "../services/store";
+import { useAppDispatch, useAppSelector } from "../services/store";
 
 interface Props {
   children: React.ReactNode | string;
+  drawerChildren: React.ReactNode;
 }
 
 const LOADING_PROGRESS_HEIGHT = 4;
 
-export const MainLayout = ({ children }: Props) => {
+export const MainLayout = ({ children, drawerChildren }: Props) => {
+  const dispatch = useAppDispatch();
+  const { drawerOpened } = AppActions;
+ 
   const appBar = useRef<HTMLDivElement>(null);
   const appBarHeight = appBar.current && appBar.current.clientHeight;
   const isLoading = useAppSelector(selectAppLoading);
+  const isOpened = useAppSelector(selectAppIsDrawerOpened)
 
   return (
     <>
@@ -24,13 +28,11 @@ export const MainLayout = ({ children }: Props) => {
         )}
       </LoadingContainer>
       <AppBar ref={appBar} />
+      <Drawer open={isOpened} onClose={() => dispatch(drawerOpened(false))}>
+        {drawerChildren}
+      </Drawer>
       <Container margin={appBarHeight}>
-        <Body>
-          <NavigatorContainer>
-            <Navigator />
-          </NavigatorContainer>
-          <ChildrenContainer>{children}</ChildrenContainer>
-        </Body>
+        <Body>{children}</Body>
       </Container>
     </>
   );
@@ -50,16 +52,7 @@ const LoadingContainer = styled("div")`
 
 const Body = styled("div")`
   width: 100%;
-  height: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-`;
-
-const NavigatorContainer = styled("div")``;
-
-const ChildrenContainer = styled("div")`
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
