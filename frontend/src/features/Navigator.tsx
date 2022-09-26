@@ -1,4 +1,4 @@
-import { Button as ButtonMUI, styled } from "@mui/material";
+import { Button as ButtonMUI, styled, TextField } from "@mui/material";
 import SelectAllIcon from "@mui/icons-material/SelectAll";
 import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
@@ -7,9 +7,11 @@ import { useAppDispatch, useAppSelector } from "../services/store";
 import {
   AppActions,
   Category,
-  selectAllCategories,
   selectChosenCategory,
-} from "../app.store";
+  selectSearchValue,
+} from "../app.slice";
+
+const categories = Object.values(Category);
 
 const getIcon = (category: keyof typeof Category) => {
   switch (category) {
@@ -28,12 +30,22 @@ const getIcon = (category: keyof typeof Category) => {
 
 export const Navigator = () => {
   const dispatch = useAppDispatch();
-  const { categorySelected } = AppActions;
+  const { categorySelected, searchInputUpdated } = AppActions;
+
   const selected = useAppSelector(selectChosenCategory);
-  const categories = useAppSelector(selectAllCategories);
+  const searchValue = useAppSelector(selectSearchValue);
+
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch(searchInputUpdated(e.currentTarget.value));
 
   return (
     <Container>
+      <Search
+        label="Search by title"
+        variant="outlined"
+        value={searchValue}
+        onChange={onChangeSearch}
+      />
       {categories.map((category) => (
         <Button
           key={category}
@@ -52,9 +64,14 @@ export const Navigator = () => {
 const Container = styled("div")`
   height: 100%;
   width: 100%;
+  padding-top: 1rem;
   min-width: 250px;
   display: flex;
   flex-direction: column;
+`;
+
+const Search = styled(TextField)`
+  margin: 0.5rem;
 `;
 
 const Button = styled(ButtonMUI)<{ selected: boolean }>`

@@ -10,7 +10,7 @@ import {
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAppDispatch } from "../services/store";
-import { AppActions } from "../app.store";
+import { AppActions } from "../app.slice";
 
 export const AppBar = React.forwardRef<HTMLDivElement>((_, ref) => {
   const dispatch = useAppDispatch();

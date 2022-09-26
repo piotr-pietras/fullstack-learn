@@ -1,6 +1,6 @@
 import { Drawer, LinearProgress, styled } from "@mui/material";
 import React, { useRef } from "react";
-import { AppActions, selectAppIsDrawerOpened, selectAppLoading } from "../app.store";
+import { AppActions, selectAppIsDrawerOpened, selectAppLoading } from "../app.slice";
 import { AppBar } from "../features/AppBar";
 import { useAppDispatch, useAppSelector } from "../services/store";
 

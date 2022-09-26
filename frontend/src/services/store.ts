@@ -1,11 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { AppSlice } from "../app.store";
+import { AppSlice } from "../app.slice";
 import {
   PostBoardSaga,
   PostBoardSlice,
 } from "../features/PostBoard/post-board.store";
 import createSagaMiddleware from "redux-saga";
+import { fork } from "redux-saga/effects";
+import { AppSaga } from "../app.saga";
+
+function* sagaRoot() {
+  yield fork(PostBoardSaga);
+  yield fork(AppSaga);
+}
 
 export const createStore = () => {
   const saga = createSagaMiddleware();
@@ -19,7 +26,7 @@ export const createStore = () => {
       getDefaultMiddleware({ thunk: false }).concat(saga),
   });
 
-  saga.run(PostBoardSaga);
+  saga.run(sagaRoot);
 
   return store;
 };

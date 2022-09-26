@@ -8,10 +8,12 @@ specifiers:
   '@mui/material': ^5.6.2
   '@reduxjs/toolkit': ^1.8.1
   '@types/jest': ^27.4.1
+  '@types/lodash': ^4.14.185
   '@types/node': ^16.11.28
   '@types/react': ^18.0.6
   '@types/react-dom': ^18.0.2
   date-fns: ^2.29.2
+  lodash: ^4.17.21
   react: ^18.0.0
   react-dom: ^18.0.0
   react-redux: ^8.0.1
@@ -27,10 +29,12 @@ dependencies:
   '@mui/material': 5.10.1_943379e34ffaae2d4d942726413d7655
   '@reduxjs/toolkit': 1.8.4_react-redux@8.0.2+react@18.2.0
   '@types/jest': 27.5.2
+  '@types/lodash': 4.14.185
   '@types/node': 16.11.49
   '@types/react': 18.0.17
   '@types/react-dom': 18.0.6
   date-fns: 2.29.2
+  lodash: 4.17.21
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-redux: 8.0.2_ff80cd9dfb626a6c6c4251864122e347
@@ -2771,6 +2775,10 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: false
+
+  /@types/lodash/4.14.185:
+    resolution: {integrity: sha512-evMDG1bC4rgQg4ku9tKpuMh5iBNEwNa3tf9zRHdP1qlv+1WUg44xat4IxCE14gIpZRGUUWAx2VhItCZc25NfMA==}
     dev: false
 
   /@types/mime/3.0.1:
