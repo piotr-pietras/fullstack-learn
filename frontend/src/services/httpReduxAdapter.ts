@@ -15,7 +15,7 @@ export interface RequestState<T> {
 
 export type RequestOption = {
   url: string;
-  method: "GET" | "POST";
+  method: string;
 };
 
 type DataFetchedReducer = (

@@ -4,7 +4,7 @@ import { Post } from "../../../../types/post.type";
 interface PostsQuery {
   quantity?: "quantity";
   type?: Post["type"];
-  contains?: string;
+  title?: string;
 }
 
 const buildResBody = async (query: unknown) => {
@@ -12,10 +12,10 @@ const buildResBody = async (query: unknown) => {
 
   const quantity = (q?.quantity && `LIMIT ${q?.quantity}`) || "";
   const type = (q?.type && q.type !== "all" && `WHERE type='${q.type}'`) || "";
-  const contains = (q?.contains && `WHERE title ~* '${q.contains}'`) || "";
+  const title = (q?.title && `WHERE title ~* '${q.title}'`) || "";
 
   const result = await postgres.query<Post>( 
-    `SELECT * FROM posts ${type} ${contains} ORDER BY created_on DESC ${quantity} `
+    `SELECT * FROM posts ${type} ${title} ORDER BY created_on DESC ${quantity} `
   );
   return JSON.stringify(result.rows);
 };

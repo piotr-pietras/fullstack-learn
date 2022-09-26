@@ -3,8 +3,9 @@ import { selectPosts } from "./selectors";
 import { PostCard } from "./PostCard";
 import { useEffect } from "react";
 import { PostBoardActions } from "./post-board.store";
-import { env } from "../../services/env";
 import { selectChosenCategory } from "../../app.slice";
+import { styled } from "@mui/material";
+import { Backend } from "../../services/backend";
 
 export const PostBoard = () => {
   const dispatch = useAppDispatch();
@@ -16,17 +17,24 @@ export const PostBoard = () => {
   useEffect(() => {
     if (category)
       dispatch(
-        dataFetched({
-          method: "POST",
-          url: `${env.backendURL}posts?quantity=20&type=${category}`,
-        })
+        dataFetched(Backend.getPosts(category))
       );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
   return (
     <div>
-      {posts && posts.map((post) => <PostCard key={post.id} post={post} />)}
+      {posts && posts.length ? (
+        posts.map((post) => <PostCard key={post.id} post={post} />)
+      ) : (
+        <NoPosts>There is no any posts :(</NoPosts>
+      )}
     </div>
   );
 };
+
+const NoPosts = styled("div")`
+  margin: 2rem;
+  font-size: ${({ theme }) => theme.fontSize.XL};
+  color: ${({ theme }) => theme.colors.grey};
+`;
