@@ -17,9 +17,7 @@ export const postgres = new Postgres({
 });
 
 const init = async () => {
-  await postgres.connect();
-  // const a = await postgres.query("SELECT * FROM posts WHERE id=1");
-  // console.log(a)
+  // await postgres.connect();
   listener(host, port);
   console.log(`Running at ${host}:${port}`);
 };

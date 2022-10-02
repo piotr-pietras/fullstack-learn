@@ -7,6 +7,7 @@ import { Requests } from "../requests/requests";
 
 export const listener = (host: string, port: number) => {
   createServer((req, res) => {
+    console.log('Incoming request...')
     const request = recognizeRequest(req);
     const query = url.parse(req.url || "", true).query;
 

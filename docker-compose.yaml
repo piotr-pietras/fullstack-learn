@@ -1,0 +1,27 @@
+
+version: '3.7'
+
+services:
+  frontend:
+    container_name: fullstack-learn-frontend
+    build: 
+      dockerfile: frontend.docker
+      context: .
+    volumes: 
+      - ./frontend/src:/app/src
+    ports:
+      - 3000:3000
+    env_file:
+      - ./frontend/.env
+  
+  backend: 
+    container_name: fullstack-learn-backend
+    build:
+      dockerfile: backend.docker
+      context: .
+    volumes:
+      - ./backend/src:/app/src
+    ports:
+      - 8100:8100
+    env_file:
+      - ./backend/.env
