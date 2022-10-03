@@ -12,10 +12,14 @@ services:
     ports:
       - 3000:3000
     env_file:
-      - ./frontend/.env
+      - .env
   
   backend: 
     container_name: fullstack-learn-backend
+    links: 
+      - "db:postgres"
+    depends_on:
+      - db
     build:
       dockerfile: backend.docker
       context: .
@@ -24,4 +28,15 @@ services:
     ports:
       - 8100:8100
     env_file:
-      - ./backend/.env
+      - .env
+
+  db:
+    container_name: fullstack-learn-db
+    build:
+      dockerfile: db.docker
+      context: .
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT}

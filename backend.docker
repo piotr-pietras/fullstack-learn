@@ -9,6 +9,4 @@ WORKDIR /app
 COPY ./backend .
 RUN pnpm install
 
-EXPOSE 8100
-
 CMD ["pnpm", "ts-node", "index.ts"]
