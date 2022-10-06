@@ -1,4 +1,4 @@
-CREATE TABLE POSTS (
+create table posts (
     id SERIAL PRIMARY KEY NOT NULL,
     type varchar(10) NOT NULL,
     user_id int NOT NULL,

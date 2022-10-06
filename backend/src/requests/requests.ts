@@ -1,6 +1,6 @@
 import { RequestOptions } from "http";
 import { ParsedUrlQuery } from "querystring";
-import { getPostsRequest } from "./posts/posts.builder";
+import { buildPostsRequest } from "./posts/posts.builder";
 
 enum RequestsList {
   posts = "posts",
@@ -8,10 +8,11 @@ enum RequestsList {
 
 type RequestsType = {
   [key in RequestsList]: RequestOptions & {
+    needAuth: boolean,
     buildResBody: (query: ParsedUrlQuery) => Promise<string>;
   };
 };
 
 export const Requests: RequestsType = {
-  [RequestsList.posts]: getPostsRequest(),
+  [RequestsList.posts]: buildPostsRequest(),
 };

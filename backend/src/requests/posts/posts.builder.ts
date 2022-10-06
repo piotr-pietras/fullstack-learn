@@ -20,7 +20,7 @@ const buildResBody = async (query: unknown) => {
   return JSON.stringify(result.rows);
 };
 
-export const getPostsRequest = () => {
+export const buildPostsRequest = () => {
   return {
     path: "/posts",
     method: "POST",
@@ -28,6 +28,7 @@ export const getPostsRequest = () => {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     },
+    needAuth: true,
     buildResBody,
   };
 };
