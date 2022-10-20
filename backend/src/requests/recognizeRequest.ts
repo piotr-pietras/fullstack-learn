@@ -6,9 +6,15 @@ export const recognizeRequest = (req: IncomingMessage) => {
   const path = url.parse(req.url || "", true).pathname;
   const method = req.method;
   const values = Object.values(Requests);
-  const request = values.find(
-    (option) => option.path === path && option.method === method
-  );
+  const request = values.find((option) => {
+    //Pre-flight
+    if (!option.path && option.method === method) {
+      return true;
+    }
+    if (option.path === path && option.method === method) {
+      return true;
+    }
+  });
 
   return request;
 };

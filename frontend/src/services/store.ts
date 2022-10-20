@@ -8,10 +8,12 @@ import {
 import createSagaMiddleware from "redux-saga";
 import { fork } from "redux-saga/effects";
 import { AppSaga } from "../app.saga";
+import { LoginSaga, LoginSlice } from "../login.store";
 
 function* sagaRoot() {
-  yield fork(PostBoardSaga);
   yield fork(AppSaga);
+  yield fork(LoginSaga);
+  yield fork(PostBoardSaga);
 }
 
 export const createStore = () => {
@@ -20,6 +22,7 @@ export const createStore = () => {
   const store = configureStore({
     reducer: {
       [AppSlice.name]: AppSlice.reducer,
+      [LoginSlice.name]: LoginSlice.reducer,
       [PostBoardSlice.name]: PostBoardSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>

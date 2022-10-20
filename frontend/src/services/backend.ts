@@ -8,6 +8,7 @@ export class Backend {
     return {
       method: "POST",
       url: `${backend}posts?quantity=20&type=${type}`,
+      auth: false,
     };
   }
 
@@ -15,6 +16,16 @@ export class Backend {
     return {
         method: "POST",
         url: `${backend}posts?quantity=20&title=${title}`,
+        auth: false,
+      };
+  }
+
+
+  static getLogin() {
+    return {
+        method: "GET",
+        url: `${backend}login`,
+        auth: true,
       };
   }
 }

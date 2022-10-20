@@ -16,6 +16,7 @@ export interface RequestState<T> {
 export type RequestOption = {
   url: string;
   method: string;
+  auth: boolean;
 };
 
 type DataFetchedReducer = (
@@ -64,23 +65,30 @@ const buildSagaFunction = (
   globalLoading?: ActionCreatorWithPayload<boolean, string>
 ) => {
   return function* () {
-    yield takeLatest(dataFetched, function* ({ payload: { method, url } }) {
-      yield put(requestUpdated({ status: "pending" }));
-      if (globalLoading) yield put(globalLoading(true));
+    yield takeLatest(
+      dataFetched,
+      function* ({ payload: { method, url, auth } }) {
+        yield put(requestUpdated({ status: "pending" }));
+        if (globalLoading) yield put(globalLoading(true));
+        console.log(method);
+        try {
+          const response: Response = yield call(fetch, url, {
+            method,
+            credentials: auth ? "include" : "omit",
+            headers: {
+              Authoriaztion: "test",
+            },
+          });
+          const json: unknown = yield response.json();
 
-      try {
-        const response: Response = yield call(fetch, url, {
-          method,
-        });
-        const json: unknown = yield response.json();
-        
-        yield put(requestUpdated({ status: "success", response: json }));
-        if (globalLoading) yield put(globalLoading(false));
-      } catch (err) {
-        yield put(requestUpdated({ status: "failure" }));
-        if (globalLoading) yield put(globalLoading(false));
+          yield put(requestUpdated({ status: "success", response: json }));
+          if (globalLoading) yield put(globalLoading(false));
+        } catch (err) {
+          yield put(requestUpdated({ status: "failure" }));
+          if (globalLoading) yield put(globalLoading(false));
+        }
       }
-    });
+    );
   };
 };
 

@@ -1,5 +1,7 @@
 import { postgres } from "../../../index";
 import { Post } from "../../../../types/post.type";
+import { IncomingMessage } from "http";
+import url from "url";
 
 interface PostsQuery {
   quantity?: "quantity";
@@ -7,14 +9,15 @@ interface PostsQuery {
   title?: string;
 }
 
-const buildResBody = async (query: unknown) => {
+const buildResBody = async (inc: IncomingMessage) => {
+  const query = url.parse(inc.url || "", true).query as PostsQuery;
   const q = query as PostsQuery;
 
   const quantity = (q?.quantity && `LIMIT ${q?.quantity}`) || "";
   const type = (q?.type && q.type !== "all" && `WHERE type='${q.type}'`) || "";
   const title = (q?.title && `WHERE title ~* '${q.title}'`) || "";
 
-  const result = await postgres.query<Post>( 
+  const result = await postgres.query<Post>(
     `SELECT * FROM posts ${type} ${title} ORDER BY created_on DESC ${quantity} `
   );
   return JSON.stringify(result.rows);
@@ -28,7 +31,7 @@ export const buildPostsRequest = () => {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     },
-    needAuth: true,
+    needAuth: false,
     buildResBody,
   };
 };
