@@ -7,7 +7,7 @@ export const recognizeRequest = (req: IncomingMessage) => {
   const method = req.method;
   const values = Object.values(Requests);
   const request = values.find((option) => {
-    //Pre-flight
+    //Pre-flight recognition
     if (!option.path && option.method === method) {
       return true;
     }

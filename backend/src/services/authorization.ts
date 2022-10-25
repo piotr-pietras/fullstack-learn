@@ -2,10 +2,15 @@ import { IncomingMessage } from "http";
 import { postgres } from "../..";
 import { recognizeRequest } from "../requests/recognizeRequest";
 
+export interface Authorization {
+  userId?: string;
+  allowed: boolean;
+}
+
 export const authorization = async (
   req: ReturnType<typeof recognizeRequest>,
   inc: IncomingMessage
-): Promise<{ userId?: number; allowed: boolean }> => {
+): Promise<Authorization> => {
   const headerToken = inc.headers.authorization || "";
   const { rows } = await postgres.query(
     `SELECT id FROM users WHERE token='${headerToken}'`
@@ -13,7 +18,6 @@ export const authorization = async (
 
   if (rows.length > 0)
     return Promise.resolve({ userId: rows[0]["id"], allowed: true });
-  if (!req?.needAuth)
-    return Promise.resolve({ userId: undefined, allowed: true });
-  return Promise.reject("Auth failed");
+  if (!req?.needAuth) return Promise.resolve({ allowed: true });
+  return Promise.resolve({ allowed: false });
 };

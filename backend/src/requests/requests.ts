@@ -1,4 +1,5 @@
 import { IncomingMessage, RequestOptions } from "http";
+import { Authorization } from "../services/authorization";
 import { buildLoginRequest } from "./login/login.builder";
 import { buildPostsRequest } from "./posts/posts.builder";
 import { buildPreFlightRequest } from "./pre-flight/pre-flight";
@@ -12,7 +13,10 @@ export enum RequestsList {
 type RequestsType = {
   [key in RequestsList]: RequestOptions & {
     needAuth: boolean;
-    buildResBody: (inc: IncomingMessage) => Promise<string>;
+    buildResBody: (
+      inc: IncomingMessage,
+      auth?: Authorization
+    ) => Promise<string>;
   };
 };
 

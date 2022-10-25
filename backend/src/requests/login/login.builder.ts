@@ -7,6 +7,7 @@ const buildResBody = async (inc: IncomingMessage) => {
     `SELECT * FROM users WHERE token='${headerToken}'`
   );
 
+  if (!rows[0]) return JSON.stringify({});
   return JSON.stringify(rows[0]);
 };
 
@@ -18,7 +19,7 @@ export const buildLoginRequest = () => {
       "Access-Control-Allow-Origin": "http://localhost:3000",
       "Access-Control-Allow-Credentials": "true",
     },
-    needAuth: true,
+    needAuth: false,
     buildResBody,
   };
 };

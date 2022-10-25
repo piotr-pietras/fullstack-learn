@@ -8,7 +8,7 @@ import { call, ForkEffect, put, takeLatest } from "redux-saga/effects";
 type RequestStatus = "pending" | "success" | "failure";
 export interface RequestState<T> {
   request: {
-    response?: T;
+    response?: T | null;
     status?: RequestStatus;
   };
 }
@@ -70,13 +70,14 @@ const buildSagaFunction = (
       function* ({ payload: { method, url, auth } }) {
         yield put(requestUpdated({ status: "pending" }));
         if (globalLoading) yield put(globalLoading(true));
-        console.log(method);
+
+        const token = window.localStorage.getItem("token") || "";
         try {
           const response: Response = yield call(fetch, url, {
             method,
             credentials: auth ? "include" : "omit",
             headers: {
-              Authoriaztion: "test",
+              Authorization: token,
             },
           });
           const json: unknown = yield response.json();
@@ -94,7 +95,7 @@ const buildSagaFunction = (
 
 export const httpReduxAdapter = <T>() => {
   const adapter: SagaAdapter<T> = {
-    getRequestInitialState: () => ({ request: {} }),
+    getRequestInitialState: () => ({ request: { response: null } }),
     getRequestReducers: buildReducers,
     getRequestSaga: buildSagaFunction,
   };
