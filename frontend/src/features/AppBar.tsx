@@ -12,16 +12,22 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useAppDispatch, useAppSelector } from "../services/store";
 import { AppActions } from "../app.slice";
 import { selectIsLogged } from "../login.store";
+import { ModalList } from "./Modals/Modal";
 
 export const AppBar = React.forwardRef<HTMLDivElement>((_, ref) => {
   const logged = useAppSelector(selectIsLogged);
 
   const dispatch = useAppDispatch();
-  const { drawerOpened } = AppActions;
+  const { drawerOpened, modalOpened } = AppActions;
 
   const trigger = useScrollTrigger({
     target: window,
   });
+
+  const onUserClick = () => {
+    !logged &&
+      dispatch(modalOpened({ isOpened: true, content: ModalList.register }));
+  };
 
   return (
     <>
@@ -35,7 +41,9 @@ export const AppBar = React.forwardRef<HTMLDivElement>((_, ref) => {
             <MenuIcon />
           </IconButton>
           <AppTitle>PostMe</AppTitle>
-          <Button>{logged ? <Avatar /> : <Login>login me</Login>}</Button>
+          <Button onClick={onUserClick}>
+            {logged ? <Avatar /> : <Login>register me</Login>}
+          </Button>
         </Container>
       </Slide>
     </>

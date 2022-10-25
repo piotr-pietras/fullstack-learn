@@ -1,4 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ModalList } from "./features/Modals/Modal";
 import { State } from "./services/store";
 
 export enum Category {
@@ -13,6 +14,8 @@ interface InitialState {
   appLoading: boolean;
   isDrawerOpened: boolean;
   searchValue: string;
+  isModalOpened: boolean;
+  modalContent: ModalList;
 }
 
 const initialState: InitialState = {
@@ -20,6 +23,8 @@ const initialState: InitialState = {
   appLoading: false,
   isDrawerOpened: false,
   searchValue: "",
+  isModalOpened: false,
+  modalContent: ModalList.register,
 };
 
 export const AppSlice = createSlice({
@@ -40,6 +45,13 @@ export const AppSlice = createSlice({
     },
     searchInputUpdated: (state, { payload }: PayloadAction<string>) => {
       state.searchValue = payload;
+    },
+    modalOpened: (
+      state,
+      { payload }: PayloadAction<{ isOpened: boolean; content?: ModalList }>
+    ) => {
+      state.isModalOpened = payload.isOpened;
+      if (payload.content) state.modalContent = payload.content;
     },
   },
 });
@@ -63,4 +75,12 @@ export const selectSearchValue = createSelector(
   selectAppSlice,
   (app) => app.searchValue
 );
+export const selectIsModalOpened = createSelector(
+  selectAppSlice,
+  (app) => app.isModalOpened
+);
 
+export const selectModalContent = createSelector(
+  selectAppSlice,
+  (app) => app.modalContent
+);

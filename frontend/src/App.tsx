@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "./services/store";
 import { LoginActions } from "./login.store";
 import { Backend } from "./services/backend";
+import { Modal } from "./features/Modals/Modal";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -20,6 +21,7 @@ function App() {
       <MainLayout drawerChildren={<Navigator />}>
         <PostBoard />
       </MainLayout>
+      <Modal />
     </div>
   );
 }
