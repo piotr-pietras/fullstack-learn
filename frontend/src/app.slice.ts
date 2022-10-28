@@ -11,7 +11,6 @@ export enum Category {
 
 interface InitialState {
   category: keyof typeof Category | undefined;
-  appLoading: boolean;
   isDrawerOpened: boolean;
   searchValue: string;
   isModalOpened: boolean;
@@ -20,7 +19,6 @@ interface InitialState {
 
 const initialState: InitialState = {
   category: "all",
-  appLoading: false,
   isDrawerOpened: false,
   searchValue: "",
   isModalOpened: false,
@@ -39,9 +37,6 @@ export const AppSlice = createSlice({
     },
     drawerOpened: (state, { payload }: PayloadAction<boolean>) => {
       state.isDrawerOpened = payload;
-    },
-    appLoaded: (state, { payload }: PayloadAction<boolean>) => {
-      state.appLoading = payload;
     },
     searchInputUpdated: (state, { payload }: PayloadAction<string>) => {
       state.searchValue = payload;
@@ -66,10 +61,6 @@ export const selectChosenCategory = createSelector(
 export const selectAppIsDrawerOpened = createSelector(
   selectAppSlice,
   (app) => app.isDrawerOpened
-);
-export const selectAppLoading = createSelector(
-  selectAppSlice,
-  (app) => app.appLoading
 );
 export const selectSearchValue = createSelector(
   selectAppSlice,

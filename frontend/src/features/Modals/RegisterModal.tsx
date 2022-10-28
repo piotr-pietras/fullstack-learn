@@ -1,6 +1,20 @@
 import { Button, styled, TextField } from "@mui/material";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { RegisterActions } from "../../register.store";
+import { Backend } from "../../services/backend";
+// import { useAppSelector } from "../../services/store";
+// import { selectIsAppLoading } from "../../services/selectors";
 
 export const RegisterModal = () => {
+  const [username, setUsername] = useState("");
+  // const isLoading = useAppSelector(selectIsAppLoading);
+
+  const dispatch = useDispatch();
+  const onRegister = () => {
+    dispatch(RegisterActions.dataFetched(Backend.postRegister(username)));
+  };
+
   return (
     <div>
       <Title>Registration</Title>
@@ -9,10 +23,17 @@ export const RegisterModal = () => {
         auth token which will be stored in your browser
       </Description>
       <FieldContainer>
-        <TextField label="username" variant="filled" />
+        <TextField
+          label="username"
+          variant="filled"
+          value={username}
+          onChange={(e) => setUsername(e.currentTarget.value)}
+        />
       </FieldContainer>
       <ButtonContainer>
-        <Button variant="outlined">register</Button>
+        <Button variant="outlined" onClick={onRegister}>
+          register
+        </Button>
       </ButtonContainer>
     </div>
   );

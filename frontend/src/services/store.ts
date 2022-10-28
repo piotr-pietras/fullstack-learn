@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppSlice } from "../app.slice";
 import {
@@ -9,12 +9,20 @@ import createSagaMiddleware from "redux-saga";
 import { fork } from "redux-saga/effects";
 import { AppSaga } from "../app.saga";
 import { LoginSaga, LoginSlice } from "../login.store";
+import { RegisterSlice, RegisterSaga } from "../register.store";
 
 function* sagaRoot() {
   yield fork(AppSaga);
   yield fork(LoginSaga);
+  yield fork(RegisterSaga);
   yield fork(PostBoardSaga);
 }
+
+const request = combineReducers({
+  [LoginSlice.name]: LoginSlice.reducer,
+  [RegisterSlice.name]: RegisterSlice.reducer,
+  [PostBoardSlice.name]: PostBoardSlice.reducer,
+});
 
 export const createStore = () => {
   const saga = createSagaMiddleware();
@@ -22,8 +30,7 @@ export const createStore = () => {
   const store = configureStore({
     reducer: {
       [AppSlice.name]: AppSlice.reducer,
-      [LoginSlice.name]: LoginSlice.reducer,
-      [PostBoardSlice.name]: PostBoardSlice.reducer,
+      request,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ thunk: false }).concat(saga),

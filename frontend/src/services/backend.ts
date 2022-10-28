@@ -14,18 +14,26 @@ export class Backend {
 
   static getPostsByTitle(title: string) {
     return {
-        method: "POST",
-        url: `${backend}posts?quantity=20&title=${title}`,
-        auth: false,
-      };
+      method: "POST",
+      url: `${backend}posts?quantity=20&title=${title}`,
+      auth: false,
+    };
   }
-
 
   static getLogin() {
     return {
-        method: "GET",
-        url: `${backend}login`,
-        auth: true,
-      };
+      method: "GET",
+      url: `${backend}login`,
+      auth: true,
+    };
+  }
+
+  static postRegister(username: string) {
+    return {
+      method: "POST",
+      url: `${backend}register`,
+      auth: false,
+      body: JSON.stringify({ username }),
+    };
   }
 }

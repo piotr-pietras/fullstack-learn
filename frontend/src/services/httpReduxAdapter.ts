@@ -1,8 +1,4 @@
-import {
-  ActionCreatorWithPayload,
-  CaseReducerActions,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { CaseReducerActions, PayloadAction } from "@reduxjs/toolkit";
 import { call, ForkEffect, put, takeLatest } from "redux-saga/effects";
 
 type RequestStatus = "pending" | "success" | "failure";
@@ -17,87 +13,77 @@ export type RequestOption = {
   url: string;
   method: string;
   auth: boolean;
+  body?: string;
 };
 
 type DataFetchedReducer = (
   _: any,
   { payload }: PayloadAction<RequestOption>
 ) => void;
-type RequestUpdatedReducer = (
+type RequestUpdatedReducer<T> = (
   state: any,
-  { payload }: PayloadAction<RequestState<unknown>["request"]>
+  { payload }: PayloadAction<RequestState<T>["request"]>
 ) => void;
+type AdapterReducers<T> = {
+  dataFetched: DataFetchedReducer;
+  requestUpdated: RequestUpdatedReducer<T>;
+};
 
 interface SagaAdapter<T> {
   getRequestInitialState: () => RequestState<T>;
-  getRequestReducers: () => {
-    dataFetched: DataFetchedReducer;
-    requestUpdated: RequestUpdatedReducer;
-  };
+  getRequestReducers: () => AdapterReducers<T>;
   getRequestSaga: (
-    actions: CaseReducerActions<{
-      dataFetched: DataFetchedReducer;
-      requestUpdated: RequestUpdatedReducer;
-    }>,
-    globalLoading?: ActionCreatorWithPayload<boolean, string>
+    actions: CaseReducerActions<AdapterReducers<T>>
   ) => () => Generator<ForkEffect<never>, void, unknown>;
 }
 
-const buildReducers = () => ({
-  dataFetched: (_: any, { payload }: PayloadAction<RequestOption>) => {},
-  requestUpdated: (
-    state: any,
-    { payload }: PayloadAction<RequestState<unknown>["request"]>
-  ) => {
-    if (payload.response) state.request.response = payload.response;
-    if (payload.status) state.request.status = payload.status;
-  },
-});
+const buildReducers =
+  <T>() =>
+  (): AdapterReducers<T> => ({
+    dataFetched: () => {},
+    requestUpdated: (state, { payload }) => {
+      if (payload.response) state.request.response = payload.response;
+      if (payload.status) state.request.status = payload.status;
+    },
+  });
 
-const buildSagaFunction = (
-  {
-    dataFetched,
-    requestUpdated,
-  }: CaseReducerActions<{
-    dataFetched: DataFetchedReducer;
-    requestUpdated: RequestUpdatedReducer;
-  }>,
-  globalLoading?: ActionCreatorWithPayload<boolean, string>
-) => {
-  return function* () {
-    yield takeLatest(
-      dataFetched,
-      function* ({ payload: { method, url, auth } }) {
-        yield put(requestUpdated({ status: "pending" }));
-        if (globalLoading) yield put(globalLoading(true));
+const buildSagaFunction =
+  <T>() =>
+  ({ dataFetched, requestUpdated }: CaseReducerActions<AdapterReducers<T>>) => {
+    return function* () {
+      yield takeLatest(
+        dataFetched,
+        function* ({ payload: { method, url, auth, body } }) {
+          yield put(requestUpdated({ status: "pending" }));
 
-        const token = window.localStorage.getItem("token") || "";
-        try {
-          const response: Response = yield call(fetch, url, {
-            method,
-            credentials: auth ? "include" : "omit",
-            headers: {
-              Authorization: token,
-            },
-          });
-          const json: unknown = yield response.json();
+          const token = window.localStorage.getItem("token") || "";
+          try {
+            const response: Response = yield call(fetch, url, {
+              method,
+              credentials: auth ? "include" : "omit",
+              headers: {
+                Authorization: token,
+              },
+              body,
+            });
+            const json: T = yield response.json();
 
-          yield put(requestUpdated({ status: "success", response: json }));
-          if (globalLoading) yield put(globalLoading(false));
-        } catch (err) {
-          yield put(requestUpdated({ status: "failure" }));
-          if (globalLoading) yield put(globalLoading(false));
+            yield put(requestUpdated({ status: "success", response: json }));
+          } catch (err) {
+            yield put(requestUpdated({ status: "failure" }));
+          }
         }
-      }
-    );
+      );
+    };
   };
-};
 
 export const httpReduxAdapter = <T>() => {
   const adapter: SagaAdapter<T> = {
-    getRequestInitialState: () => ({ request: { response: null } }),
-    getRequestReducers: buildReducers,
-    getRequestSaga: buildSagaFunction,
+    getRequestInitialState: (): RequestState<T> => ({
+      request: { response: null },
+    }),
+    getRequestReducers: buildReducers<T>(),
+    getRequestSaga: buildSagaFunction<T>(),
   };
   return adapter;
 };

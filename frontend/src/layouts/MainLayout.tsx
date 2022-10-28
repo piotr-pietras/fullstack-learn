@@ -1,7 +1,11 @@
 import { Drawer, LinearProgress, styled } from "@mui/material";
 import React, { useRef } from "react";
-import { AppActions, selectAppIsDrawerOpened, selectAppLoading } from "../app.slice";
+import {
+  AppActions,
+  selectAppIsDrawerOpened,
+} from "../app.slice";
 import { AppBar } from "../features/AppBar";
+import { selectIsAppLoading } from "../services/selectors";
 import { useAppDispatch, useAppSelector } from "../services/store";
 
 interface Props {
@@ -14,11 +18,11 @@ const LOADING_PROGRESS_HEIGHT = 4;
 export const MainLayout = ({ children, drawerChildren }: Props) => {
   const dispatch = useAppDispatch();
   const { drawerOpened } = AppActions;
- 
+
   const appBar = useRef<HTMLDivElement>(null);
   const appBarHeight = appBar.current && appBar.current.clientHeight;
-  const isLoading = useAppSelector(selectAppLoading);
-  const isOpened = useAppSelector(selectAppIsDrawerOpened)
+  const isLoading = useAppSelector(selectIsAppLoading);
+  const isOpened = useAppSelector(selectAppIsDrawerOpened);
 
   return (
     <>

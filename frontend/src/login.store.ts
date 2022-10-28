@@ -1,7 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { fork } from "redux-saga/effects";
 import { User } from "../../types/user.type";
-import { AppActions } from "./app.slice";
 import { httpReduxAdapter } from "./services/httpReduxAdapter";
 import { State } from "./services/store";
 
@@ -23,16 +22,16 @@ export const LoginSlice = createSlice({
 });
 
 export const LoginActions = LoginSlice.actions;
-export const selectLogin = (state: State) => state.login;
+export const selectLogin = (state: State) => state.request.login;
 
 export const selectIsLogged = createSelector(selectLogin, (login) => {
   if (!login.request.response) {
     return false;
   }
-  return !!login.request.response.id;
+  return !!login.request.response.username;
 });
 
-const RequestSaga = getRequestSaga(LoginActions, AppActions.appLoaded);
+const RequestSaga = getRequestSaga(LoginActions);
 
 export function* LoginSaga() {
   yield fork(RequestSaga);
