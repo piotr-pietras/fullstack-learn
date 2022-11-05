@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { Client as Postgres } from "pg";
+import { pause } from "./src/helpers/pause";
 import { listener } from "./src/services/listener";
 
 dotenv.config();
@@ -19,9 +20,15 @@ export const postgres = new Postgres({
 });
 
 const init = async () => {
-  await postgres.connect();
-  listener(host, port);
-  console.log(`Running at ${host}:${port}`);
+  try {
+    await postgres.connect();
+    listener(host, port);
+    console.log(`Running at ${host}:${port}`);
+  } catch (error) {
+    console.log('Retrying to start server...');
+    pause(2000);
+    init();
+  }
 };
 
 init();

@@ -24,7 +24,7 @@ export const RegisterSlice = createSlice({
 });
 
 export const RegisterActions = RegisterSlice.actions;
-export const selectRegister = (state: State) => state.request.login;
+export const selectRegister = (state: State) => state.request.register;
 
 function* AfterRequestSaga() {
   yield takeLatest(RegisterActions.requestUpdated, function* ({ payload }) {

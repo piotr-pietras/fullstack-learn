@@ -1,36 +1,30 @@
 import { IncomingMessage } from "http";
 import { postgres } from "../../..";
-import {
-  RegisterRequest,
-  RegisterResponse,
-} from "../../../../types/register.type";
+import { RegisterRequest } from "../../../../types/register.type";
 import { User } from "../../../../types/user.type";
 import { getRandomToken } from "../../helpers/token";
 import { jsonReader } from "../../services/jsonReader";
 
-const buildResBody = async (inc: IncomingMessage) => {
-  let response: RegisterResponse | {} = {};
-  const json = await jsonReader<RegisterRequest>(inc);
-  if (!json || !json.username) {
-    response = {
-      isSuccessful: false,
-      reason: "Json syntex error",
-    };
-    return JSON.stringify(response);
-  }
+const isJsonInvalid = async (json: RegisterRequest | undefined) => {
+  if (json && json.username) return Promise.resolve(json);
+  throw {
+    isSuccessful: false,
+    reason: "Json syntex error",
+  };
+};
 
-  const { username } = json;
+const isUserExists = async (username: string) => {
   const { rows } = await postgres.query<User>(
     `SELECT users FROM users WHERE username='${username}'`
   );
+  if (rows.length === 0) return Promise.resolve();
+  throw {
+    isSuccessful: false,
+    reason: "Username already exists",
+  };
+};
 
-  if (rows.length > 0) {
-    response = {
-      isSuccessful: false,
-      reason: "Username already exists",
-    };
-    return JSON.stringify(response);
-  }
+const insertUser = async (username: string) => {
   const timestamp = new Date().toISOString();
   const token = getRandomToken();
   const { command } = await postgres.query(
@@ -38,19 +32,30 @@ const buildResBody = async (inc: IncomingMessage) => {
   );
 
   if (command !== "INSERT") {
-    response = {
+    throw {
       isSuccessful: false,
       reason: "Something went wrong",
     };
-    return JSON.stringify(response);
   }
 
-  response = {
+  return Promise.resolve({
     isSuccessful: true,
     username,
     token,
-  };
-  return JSON.stringify(response);
+  });
+};
+
+const buildResBody = async (inc: IncomingMessage) => {
+  const json = await jsonReader<RegisterRequest>(inc);
+
+  try {
+    const { username } = await isJsonInvalid(json);
+    await isUserExists(username);
+    const response = await insertUser(username);
+    return JSON.stringify(response);
+  } catch (err) {
+    return JSON.stringify(err);
+  }
 };
 
 export const buildRegisterRequest = () => {
