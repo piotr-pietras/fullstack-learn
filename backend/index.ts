@@ -20,15 +20,9 @@ export const postgres = new Postgres({
 });
 
 const init = async () => {
-  try {
-    await postgres.connect();
-    listener(host, port);
-    console.log(`Running at ${host}:${port}`);
-  } catch (error) {
-    console.log('Retrying to start server...');
-    pause(2000);
-    init();
-  }
+  await postgres.connect(); //TODO fix connect before db avaible
+  listener(host, port);
+  console.log(`Running at ${host}:${port}`);
 };
 
 init();

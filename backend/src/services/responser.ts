@@ -16,8 +16,12 @@ export const responser = async (
     out.end();
   }
 
-  const auth = await authorization(req, inc);
-
-  out.writeHead(200, "OK", req?.headers);
-  out.end(await req?.buildResBody(inc, auth));
+  try {
+    const auth = await authorization(req, inc);
+    out.writeHead(200, "OK", req?.headers);
+    out.end(await req?.buildResBody(inc, auth));
+  } catch (error) {
+    out.writeHead(401, "AUTH ERR");
+    out.end();
+  }
 };

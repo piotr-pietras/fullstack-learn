@@ -1,6 +1,6 @@
 import { IncomingMessage } from "http";
 import { postgres } from "../../..";
-import { User, UserResponse } from "../../../../types/user.type";
+import { User, LoginResponse } from "../../../../types/user.type";
 
 const buildResBody = async (inc: IncomingMessage) => {
   const headerToken = inc.headers.authorization || "";
@@ -9,7 +9,7 @@ const buildResBody = async (inc: IncomingMessage) => {
   );
 
   if (!rows[0]) return JSON.stringify({});
-  const response: UserResponse = {
+  const response: LoginResponse = {
     username: rows[0].username,
     created_on: rows[0].created_on,
   };

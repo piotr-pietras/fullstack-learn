@@ -1,11 +1,11 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { fork } from "redux-saga/effects";
-import { User } from "../../types/user.type";
+import { LoginResponse } from "../../types/user.type";
 import { httpReduxAdapter } from "./services/httpReduxAdapter";
 import { State } from "./services/store";
 
 const { getRequestInitialState, getRequestReducers, getRequestSaga } =
-  httpReduxAdapter<User>();
+  httpReduxAdapter<LoginResponse>();
 
 interface InitialState extends ReturnType<typeof getRequestInitialState> {}
 

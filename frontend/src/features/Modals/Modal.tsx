@@ -1,14 +1,21 @@
 import { Card, Modal as ModalMUI, styled } from "@mui/material";
-import { AppActions, selectIsModalOpened, selectModalContent } from "../../app.slice";
+import {
+  AppActions,
+  selectIsModalOpened,
+  selectModalContent,
+} from "../../app.slice";
 import { useAppDispatch, useAppSelector } from "../../services/store";
+import { AddPostModal } from "./AddPostModal";
 import { RegisterModal } from "./RegisterModal";
 
 export enum ModalList {
   register = "register",
+  addPost = "addPost",
 }
 
 const getModal = (modal: ModalList) => {
   if (modal === ModalList.register) return <RegisterModal />;
+  if (modal === ModalList.addPost) return <AddPostModal />;
 };
 
 export const Modal = () => {
@@ -24,9 +31,7 @@ export const Modal = () => {
 
   return (
     <ModalMUI open={isOpened} onClose={onClose}>
-      <Container>
-        {getModal(modal)}
-      </Container>
+      <Container>{getModal(modal)}</Container>
     </ModalMUI>
   );
 };

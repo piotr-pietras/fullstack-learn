@@ -5,7 +5,7 @@ export interface User {
   token: string
 }
 
-export interface UserResponse {
+export interface LoginResponse {
   username: string,
   created_on: string,
 }

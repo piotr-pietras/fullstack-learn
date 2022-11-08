@@ -5,6 +5,7 @@ declare module "@mui/material/styles" {
     colors: {
       grey: string;
       blue: string;
+      green: string;
     };
     palette: {
       primary: {
@@ -46,6 +47,7 @@ declare module "@mui/material/styles" {
 const colors = {
   grey: "#BDBDBD",
   blue: "#1976d2",
+  green: "#82CD47",
 };
 
 export const theme = createTheme({

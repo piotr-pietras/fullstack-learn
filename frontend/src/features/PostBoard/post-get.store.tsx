@@ -13,19 +13,19 @@ const initialState: InitialState = {
   ...getRequestInitialState(),
 };
 
-export const PostBoardSlice = createSlice({
-  name: "postBoard",
+export const PostGetSlice = createSlice({
+  name: "post/get",
   initialState,
   reducers: {
     ...getRequestReducers(),
   },
 });
 
-export const PostBoardActions = PostBoardSlice.actions;
-export const selectPostBoard = (state: State) => state.request.postBoard;
+export const PostGetActions = PostGetSlice.actions;
+export const selectPostBoard = (state: State) => state.request['post/get'];
 
-const RequestSaga = getRequestSaga(PostBoardActions);
+const RequestSaga = getRequestSaga(PostGetActions);
 
-export function* PostBoardSaga() {
+export function* PostGetSaga() {
   yield fork(RequestSaga);
 }

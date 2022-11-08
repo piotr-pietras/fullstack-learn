@@ -1,12 +1,12 @@
-import { Drawer, LinearProgress, styled } from "@mui/material";
+import { Drawer, LinearProgress, styled, IconButton } from "@mui/material";
 import React, { useRef } from "react";
-import {
-  AppActions,
-  selectAppIsDrawerOpened,
-} from "../app.slice";
+import { AppActions, selectAppIsDrawerOpened } from "../app.slice";
 import { AppBar } from "../features/AppBar";
 import { selectIsAppLoading } from "../services/selectors";
 import { useAppDispatch, useAppSelector } from "../services/store";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { selectIsLogged } from "../login.store";
+import { ModalList } from "../features/Modals/Modal";
 
 interface Props {
   children: React.ReactNode | string;
@@ -17,12 +17,19 @@ const LOADING_PROGRESS_HEIGHT = 4;
 
 export const MainLayout = ({ children, drawerChildren }: Props) => {
   const dispatch = useAppDispatch();
-  const { drawerOpened } = AppActions;
+  const { drawerOpened, modalOpened } = AppActions;
 
   const appBar = useRef<HTMLDivElement>(null);
   const appBarHeight = appBar.current && appBar.current.clientHeight;
   const isLoading = useAppSelector(selectIsAppLoading);
   const isOpened = useAppSelector(selectAppIsDrawerOpened);
+  const logged = useAppSelector(selectIsLogged);
+
+  const onUserClick = () => {
+    !logged
+      ? dispatch(modalOpened({ isOpened: true, content: ModalList.register }))
+      : dispatch(modalOpened({ isOpened: true, content: ModalList.addPost }));
+  };
 
   return (
     <>
@@ -38,9 +45,20 @@ export const MainLayout = ({ children, drawerChildren }: Props) => {
       <Container margin={appBarHeight}>
         <Body>{children}</Body>
       </Container>
+      <AddButton onClick={onUserClick}>
+        <AddCircleIcon color="inherit" fontSize="inherit" />
+      </AddButton>
     </>
   );
 };
+
+const AddButton = styled(IconButton)`
+  position: fixed;
+  font-size: 10rem;
+  bottom: 2rem;
+  right: 2rem;
+  color: ${({ theme }) => theme.colors.green};
+`;
 
 const Container = styled("div")<{ margin: number | null }>`
   margin-top: ${({ margin }) => margin && `${margin}px`};

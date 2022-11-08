@@ -6,4 +6,12 @@ export interface Post {
   content: string;
 }
 
-export interface PostsResponse extends Post {}
+export interface GetPostResponse extends Post {}
+
+export interface AddPostRequest
+  extends Pick<Post, "title" | "content" | "type"> {}
+
+export interface AddPostResponse {
+  isSuccessful: boolean;
+  reason: string;
+}

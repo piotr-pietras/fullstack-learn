@@ -13,7 +13,7 @@ export const jsonReader = async <T>(
       try {
         resolve(JSON.parse(body));
       } catch (error) {
-        reject(undefined);
+        resolve(undefined);
       }
     });
   });

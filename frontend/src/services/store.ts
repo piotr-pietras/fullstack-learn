@@ -2,26 +2,32 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppSlice } from "../app.slice";
 import {
-  PostBoardSaga,
-  PostBoardSlice,
-} from "../features/PostBoard/post-board.store";
+  PostGetSaga,
+  PostGetSlice,
+} from "../features/PostBoard/post-get.store";
 import createSagaMiddleware from "redux-saga";
 import { fork } from "redux-saga/effects";
 import { AppSaga } from "../app.saga";
 import { LoginSaga, LoginSlice } from "../login.store";
 import { RegisterSlice, RegisterSaga } from "../register.store";
+import {
+  PostAddSaga,
+  PostAddSlice,
+} from "../features/PostBoard/post-add.store";
 
 function* sagaRoot() {
   yield fork(AppSaga);
   yield fork(LoginSaga);
   yield fork(RegisterSaga);
-  yield fork(PostBoardSaga);
+  yield fork(PostGetSaga);
+  yield fork(PostAddSaga);
 }
 
 const request = combineReducers({
   [LoginSlice.name]: LoginSlice.reducer,
   [RegisterSlice.name]: RegisterSlice.reducer,
-  [PostBoardSlice.name]: PostBoardSlice.reducer,
+  [PostGetSlice.name]: PostGetSlice.reducer,
+  [PostAddSlice.name]: PostAddSlice.reducer,
 });
 
 export const createStore = () => {

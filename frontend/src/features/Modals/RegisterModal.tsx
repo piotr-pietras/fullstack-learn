@@ -39,7 +39,7 @@ export const RegisterModal = () => {
       <FieldContainer>
         <TextField
           label="username"
-          variant="filled"
+          variant="outlined"
           value={username}
           onChange={(e) => setUsername(e.currentTarget.value)}
         />

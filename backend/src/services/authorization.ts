@@ -19,5 +19,5 @@ export const authorization = async (
   if (rows.length > 0)
     return Promise.resolve({ userId: rows[0]["id"], allowed: true });
   if (!req?.needAuth) return Promise.resolve({ allowed: true });
-  return Promise.resolve({ allowed: false });
+  return Promise.reject({ allowed: false });
 };

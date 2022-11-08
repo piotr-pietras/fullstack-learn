@@ -1,3 +1,4 @@
+import { AddPostRequest } from "../../../types/post.type";
 import { Category } from "../app.slice";
 import { env } from "./env";
 
@@ -34,6 +35,15 @@ export class Backend {
       url: `${backend}register`,
       auth: false,
       body: JSON.stringify({ username }),
+    };
+  }
+
+  static postAddPost(body: AddPostRequest) {
+    return {
+      method: "POST",
+      url: `${backend}add`,
+      auth: false,
+      body: JSON.stringify(body),
     };
   }
 }

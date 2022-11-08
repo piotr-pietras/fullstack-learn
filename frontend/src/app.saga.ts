@@ -1,6 +1,6 @@
 import { debounce, fork, put, select } from "redux-saga/effects";
 import { AppActions, selectSearchValue } from "./app.slice";
-import { PostBoardActions } from "./features/PostBoard/post-board.store";
+import { PostGetActions } from "./features/PostBoard/post-get.store";
 import { Backend } from "./services/backend";
 
 const SearchInputUpdatedSaga = function* () {
@@ -8,7 +8,7 @@ const SearchInputUpdatedSaga = function* () {
       yield put(AppActions.categorySelected());
       const title: string = yield select(selectSearchValue);
       yield put(
-        PostBoardActions.dataFetched(Backend.getPostsByTitle(title))
+        PostGetActions.dataFetched(Backend.getPostsByTitle(title))
       );
     });
   };

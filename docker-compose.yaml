@@ -1,22 +1,22 @@
-
-version: '3.7'
+version: "3.7"
 
 services:
   frontend:
     container_name: fullstack-learn-frontend
-    build: 
+    build:
       dockerfile: frontend.docker
       context: .
-    volumes: 
+    volumes:
       - ./frontend/src:/app/src
+      - ./types:/types
     ports:
       - 3000:3000
     env_file:
       - .env
-  
-  backend: 
+
+  backend:
     container_name: fullstack-learn-backend
-    links: 
+    links:
       - "db:postgres"
     depends_on:
       - db
@@ -25,6 +25,7 @@ services:
       context: .
     volumes:
       - ./backend/src:/app/src
+      - ./types:/types
     ports:
       - 8100:8100
     env_file:

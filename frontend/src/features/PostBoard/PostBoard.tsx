@@ -2,14 +2,14 @@ import { useAppDispatch, useAppSelector } from "../../services/store";
 import { selectPosts } from "./selectors";
 import { PostCard } from "./PostCard";
 import { useEffect } from "react";
-import { PostBoardActions } from "./post-board.store";
+import { PostGetActions } from "./post-get.store";
 import { selectChosenCategory } from "../../app.slice";
 import { styled } from "@mui/material";
 import { Backend } from "../../services/backend";
 
 export const PostBoard = () => {
   const dispatch = useAppDispatch();
-  const { dataFetched } = PostBoardActions;
+  const { dataFetched } = PostGetActions;
 
   const posts = useAppSelector(selectPosts);
   const category = useAppSelector(selectChosenCategory);
