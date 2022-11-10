@@ -24,6 +24,7 @@ services:
       dockerfile: backend.docker
       context: .
     volumes:
+      - ./backend/index.ts:/app/index.ts
       - ./backend/src:/app/src
       - ./types:/types
     ports:

@@ -1,28 +1,24 @@
-import dotenv from "dotenv";
 import { Client as Postgres } from "pg";
+import { ENV_POSTGRES, HOST_BACKEND, PORT_BACKEND } from "./src/helpers/env";
 import { pause } from "./src/helpers/pause";
 import { listener } from "./src/services/listener";
 
-dotenv.config();
-const env = process.env;
-const host = env.BACKEND_HOST || "";
-const port = parseInt(env.BACKEND_PORT || "");
-const pg_user = env.POSTGRES_USER;
-const pg_password = env.POSTGRES_PASSWORD;
-const pg_host = env.POSTGRES_HOST || "0.0.0.0";
-const pg_port = parseInt(env.POSTGRES_PORT || "5432");
+export let postgres = new Postgres(ENV_POSTGRES);
 
-export const postgres = new Postgres({
-  user: pg_user,
-  password: pg_password,
-  host: pg_host,
-  port: pg_port,
-});
+const start = async () => {
+  try {
+    await postgres.connect();
+    console.log(`Postgres initialized`);
+    listener(HOST_BACKEND, PORT_BACKEND);
+    console.log(`Server running at ${HOST_BACKEND}:${PORT_BACKEND}`);
+  } catch (err) {
+    console.log(`ERROR: ${(err as { message?: string }).message}`);
+    console.log(`Retrying to init postgres`);
+    postgres = new Postgres(ENV_POSTGRES);
 
-const init = async () => {
-  await postgres.connect(); //TODO fix connect before db avaible
-  listener(host, port);
-  console.log(`Running at ${host}:${port}`);
+    await pause(3000);
+    start();
+  }
 };
 
-init();
+start();

@@ -1,4 +1,3 @@
-import { postgres } from "../../../index";
 import { IncomingMessage } from "http";
 import { Authorization } from "../../services/authorization";
 import { AddPostRequest } from "../../../../types/post.type";
